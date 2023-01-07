@@ -37,6 +37,7 @@ public class ResponsableDaoImpl implements ResponsableDao {
                 responsable1.setPrenom(set.getString("prenom"));
                 responsable1.setEmail(set.getString("email"));
                 responsable1.setNumeroTel(set.getString("numeroTel"));
+                responsable1.setMotDePasse(set.getString("motDePasse"));
                 return responsable1;
             }
         } catch (SQLException exception) {
@@ -66,7 +67,19 @@ public class ResponsableDaoImpl implements ResponsableDao {
     }
 
     @Override
-    public Responsable modifier(Responsable o) {
-        return null;
+    public Responsable modifier(Responsable responsable) {
+        try{
+            PreparedStatement pstm=connection.prepareStatement("update RESPONSABLE set NOM=?,PRENOM=?,NUMEROTEL=?,EMAIL=?, MOTDEPASSE=? where MATRICULE=?");
+            pstm.setString(1,responsable.getNom());
+            pstm.setString(2,responsable.getPrenom());
+            pstm.setString(3,responsable.getNumeroTel());
+            pstm.setString(4,responsable.getEmail());
+            pstm.setString(5,responsable.getMotDePasse());
+            pstm.setString(6,responsable.getMatricule());
+            pstm.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return responsable;
     }
 }

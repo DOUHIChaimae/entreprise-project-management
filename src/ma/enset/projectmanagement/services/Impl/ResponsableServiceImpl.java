@@ -15,4 +15,9 @@ public class ResponsableServiceImpl implements ResponsableService {
     public Responsable login(Responsable responsable) {
         return responsableDao.login(responsable);
     }
+
+    @Override
+    public Responsable update(Responsable responsable) {
+        return responsableDao.modifier(responsable);
+    }
 }
