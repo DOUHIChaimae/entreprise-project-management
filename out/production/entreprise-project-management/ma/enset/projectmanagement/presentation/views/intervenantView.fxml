@@ -57,7 +57,7 @@
                                     <children>
                                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                             <children>
-                                                <TextField fx:id="telTextField" alignment="TOP_LEFT" layoutX="13.0" layoutY="1.0" prefHeight="26.0" prefWidth="247.0" promptText="Nv                                                                                                                                                                                         uméro de téléphone" style="-fx-background-color: transparent; -fx-border-color: #495579; -fx-border-width: 0px 0px 2px 0px;" />
+                                                <TextField fx:id="telTextField" alignment="TOP_LEFT" layoutX="13.0" layoutY="1.0" prefHeight="26.0" prefWidth="247.0" promptText="Numéro de télèphone" style="-fx-background-color: transparent; -fx-border-color: #495579; -fx-border-width: 0px 0px 2px 0px;" />
                                             </children>
                                         </AnchorPane>
                                     </children>
@@ -76,10 +76,10 @@
                                     <children>
                                         <AnchorPane prefHeight="114.0" prefWidth="262.0">
                                             <children>
-                                                <!--Button layoutX="100.0" layoutY="9.0" mnemonicParsing="false" onAction="#modifierMateriel" style="-fx-background-color: #263159; -fx-text-fill: #fffbeb; -fx-background-radius: 25px;" text="Modifier" />
-                                                <Button layoutX="5.0" layoutY="9.0" mnemonicParsing="false" onAction="#ajouterMateriel" style="-fx-background-color: #251749; -fx-text-fill: #fffbeb; -fx-background-radius: 25px;" text="Ajouter" />
+                                                <Button layoutX="100.0" layoutY="9.0" mnemonicParsing="false" onAction="#modifierInterevenant" style="-fx-background-color: #263159; -fx-text-fill: #fffbeb; -fx-background-radius: 25px;" text="Modifier" />
+                                                <Button layoutX="5.0" layoutY="9.0" mnemonicParsing="false" onAction="#ajouterIntervenant" style="-fx-background-color: #251749; -fx-text-fill: #fffbeb; -fx-background-radius: 25px;" text="Ajouter" />
                                                 <Button layoutX="185.0" layoutY="9.0" mnemonicParsing="false" onAction="#clear" prefHeight="25.0" prefWidth="61.0" style="-fx-background-color: #263159; -fx-text-fill: #fffbeb; -fx-background-radius: 25px;" text="Vider" />
-                                                <Button layoutX="40.0" layoutY="61.0" mnemonicParsing="false" onAction="#supprimerMateriel" prefHeight="25.0" prefWidth="182.0" style="-fx-background-color: red; -fx-text-fill: #fff; -fx-background-radius: 25px;" text="Supprimer" /-->
+                                                <Button layoutX="40.0" layoutY="61.0" mnemonicParsing="false" onAction="#supprimerIntervenant" prefHeight="25.0" prefWidth="182.0" style="-fx-background-color: red; -fx-text-fill: #fff; -fx-background-radius: 25px;" text="Supprimer" />
                                             </children>
                                         </AnchorPane>
                                     </children>
