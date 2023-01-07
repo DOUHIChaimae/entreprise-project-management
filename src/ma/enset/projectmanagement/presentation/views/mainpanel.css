@@ -1,0 +1,6 @@
+.bt {
+    -fx-background-color:  transparent;
+}
+.bt:hover {
+    -fx-background-color: #ffffff;
+}

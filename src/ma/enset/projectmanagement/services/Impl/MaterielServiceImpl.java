@@ -35,4 +35,9 @@ public class MaterielServiceImpl implements MaterielService {
     public List<Materiel> chercherParNomMateriel(String nomMateriel) {
         return materielDao.chercherParNomMateriel(nomMateriel);
     }
+
+    @Override
+    public void updateMateriel(Materiel materiel) {
+        materielDao.modifier(materiel);
+    }
 }

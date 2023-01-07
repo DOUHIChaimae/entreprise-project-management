@@ -27,18 +27,18 @@ public class ProjectManagementConsole {
         project.setDescription("Ceci est un projet dédié au la gestion des projets de l'entreprise");
         project.setResponsable(responsable1);
         //Add a project
-        //projetService.addProject(project);
+        // projetService.addProject(project);
         //delete a project
-        //projetService.deleteProject(projectDao.findById(4));
+        //projetService.deleteProject(projectDao.findById(1));
         //update a project
-        //projetService.update(projectDao.findById(3));
+        //projetService.update(projectDao.findById(2));
         //retourner la liste des projets
         //List<Projet> projects = projetService.getAllProjectsByResponsable(responsable1);
         //for (Projet projet : projects) {
         //System.out.println(projet);
-        //}
+        // }
         //cherché un projet par matricule
-        //System.out.println("Le projet recherché " + projetService.chercherParTitre("1er projet"));
+        //System.out.println("Le projet recherché " + projetService.chercherParTitre("1 er projet"));
         //Materiel
         //Ajouter un matériel
         MaterielDao materielDao = new MaterielDaoImpl();
