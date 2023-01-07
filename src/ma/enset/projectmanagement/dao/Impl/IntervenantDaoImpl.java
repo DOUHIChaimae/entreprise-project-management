@@ -92,8 +92,8 @@ public class IntervenantDaoImpl implements IntervenantDao {
     public Intervenant findByNom(String nom) {
         Intervenant intervenant=new Intervenant();
         try{
-            PreparedStatement stm=connection.prepareStatement("select * from INTERVENANT where NOM=?");
-            stm.setString(1,nom);
+            PreparedStatement stm=connection.prepareStatement("select * from INTERVENANT where NOM like ?");
+            stm.setString(1,"%" + nom + "%");
             ResultSet rs=stm.executeQuery();
             if(rs.next()){
                 intervenant.setMatricule(rs.getString("MATRICULE"));
@@ -102,11 +102,12 @@ public class IntervenantDaoImpl implements IntervenantDao {
                 intervenant.setNumeroTel(rs.getString("numeroTel"));
                 intervenant.setEmail(rs.getString("EMAIL"));
                 intervenant.setMotDePasse(rs.getString("MOTDEPASSE"));
+                return intervenant;
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return intervenant;
+        return null;
     }
 
     @Override
