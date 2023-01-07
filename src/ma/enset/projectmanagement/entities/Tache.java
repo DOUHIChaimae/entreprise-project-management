@@ -4,11 +4,14 @@ import java.util.Date;
 
 public class Tache {
     private int id;
+    private String titre;
     private Date dateDebut;
     private Date dateFin;
     private String description;
-    private Projet project;
+    private Projet projet;
+    private Intervenant intervenant;
     private Etat etat;
+
     public Tache() {
     }
 
@@ -18,11 +21,22 @@ public class Tache {
         this.description = description;
     }
 
-    public Tache(Date dateDebut, Date dateFin, String description, Projet project, Etat etat) {
+    public Tache(int id, Date dateDebut, Date dateFin, String description, Projet projet, Etat etat) {
+        this.id = id;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.description = description;
-        this.project = project;
+        this.projet = projet;
+        this.etat = etat;
+    }
+
+    public Tache(String titre, Date dateDebut, Date dateFin, String description, Projet projet, Intervenant intervenant, Etat etat) {
+        this.titre = titre;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.description = description;
+        this.projet = projet;
+        this.intervenant = intervenant;
         this.etat = etat;
     }
 
@@ -32,6 +46,22 @@ public class Tache {
 
     public void setDateDebut(Date dateDebut) {
         this.dateDebut = dateDebut;
+    }
+
+    public Projet getProjet() {
+        return projet;
+    }
+
+    public void setProjet(Projet projet) {
+        this.projet = projet;
+    }
+
+    public Intervenant getIntervenant() {
+        return intervenant;
+    }
+
+    public void setIntervenant(Intervenant intervenant) {
+        this.intervenant = intervenant;
     }
 
     public int getId() {
@@ -46,7 +76,7 @@ public class Tache {
         return dateFin;
     }
 
-    public void setDateFin(Date dateFin) {
+    public void setDateFin(java.sql.Date dateFin) {
         this.dateFin = dateFin;
     }
 
@@ -59,22 +89,42 @@ public class Tache {
     }
 
     public Projet getProject() {
-        return project;
+        return projet;
     }
 
-    public void setProject(Projet project) {
-        this.project = project;
+    public void setProject(Projet projet) {
+        this.projet = projet;
+    }
+
+    public Etat getEtat() {
+        return etat;
+    }
+
+    public void setEtat(Etat etat) {
+        this.etat = etat;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public void setDateFin(Date dateFin) {
+        this.dateFin = dateFin;
     }
 
     @Override
     public String toString() {
-        return "Tache{" +
-                "id=" + id +
-                ", dateDebut=" + dateDebut +
-                ", dateFin=" + dateFin +
-                ", descriptionTache='" + description + '\'' +
-                ", project=" + project +
-                ", etat=" + etat +
-                '}';
+        return "Tache d'id" + id +
+                "\ntitre : " + titre +
+                "\ndateDebut : " + dateDebut +
+                "\ndateFin : " + dateFin +
+                "\ndescription :" + description +
+                "\nCette tache est afféctée aux projets " + projet +
+                "intervenant" + intervenant +
+                "\netat : " + etat;
     }
 }

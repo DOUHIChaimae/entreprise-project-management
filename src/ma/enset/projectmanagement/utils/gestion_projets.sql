@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 06 jan. 2023 à 18:08
+-- Généré le : sam. 07 jan. 2023 à 18:33
 -- Version du serveur : 10.4.24-MariaDB
 -- Version de PHP : 8.1.6
 
@@ -54,7 +54,7 @@ CREATE TABLE `intervenant` (
 --
 
 INSERT INTO `intervenant` (`matricule`, `nom`, `prenom`, `numeroTel`, `email`, `motDePasse`) VALUES
-('m28787267', 'chabab', 'mohamed', '0664339266', 's.daabal', 'daabal');
+('m28787267', 'chabab', 'mohamed', '0664339266', 's.daabal@gmail.com', '12345678');
 
 -- --------------------------------------------------------
 
@@ -66,6 +66,13 @@ CREATE TABLE `materiel` (
   `matricule` varchar(20) NOT NULL,
   `nomMateriel` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `materiel`
+--
+
+INSERT INTO `materiel` (`matricule`, `nomMateriel`) VALUES
+('sokaina', 'matériel');
 
 -- --------------------------------------------------------
 
@@ -81,6 +88,14 @@ CREATE TABLE `projet` (
   `dateFin` date NOT NULL,
   `responsable_id` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `projet`
+--
+
+INSERT INTO `projet` (`id`, `titre`, `description`, `datedebut`, `dateFin`, `responsable_id`) VALUES
+(2, '2 eme projet', 'Ceci est un projet dédié au la gestion des projets de l\'entreprise', '1970-01-01', '1970-01-16', 'm6072345'),
+(5, '4 eme client', 'projet lllllll', '2023-01-18', '2023-01-27', 'm6072345');
 
 -- --------------------------------------------------------
 
@@ -102,7 +117,7 @@ CREATE TABLE `responsable` (
 --
 
 INSERT INTO `responsable` (`matricule`, `nom`, `prenom`, `numeroTel`, `email`, `motDePasse`) VALUES
-('m6072345', 'daabal', 'sokaina', '0604230472', 'sokainadaabal@gmail.com', 'sokaina');
+('m6072345', 'daabal', 'Sokaina', '0604230471', 'sokainadaabal@gmail.com', 'sokaina');
 
 -- --------------------------------------------------------
 
@@ -117,7 +132,8 @@ CREATE TABLE `tache` (
   `dateDebut` date NOT NULL,
   `dateFin` date NOT NULL,
   `etat` varchar(100) NOT NULL,
-  `projet_id` int(11) NOT NULL
+  `projet_id` int(11) NOT NULL,
+  `intervenant` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -162,7 +178,8 @@ ALTER TABLE `responsable`
 --
 ALTER TABLE `tache`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `projet_id` (`projet_id`);
+  ADD KEY `projet_id` (`projet_id`),
+  ADD KEY `tache_ibfk_2` (`intervenant`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -178,7 +195,7 @@ ALTER TABLE `desponiblite`
 -- AUTO_INCREMENT pour la table `projet`
 --
 ALTER TABLE `projet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `tache`
@@ -207,7 +224,8 @@ ALTER TABLE `projet`
 -- Contraintes pour la table `tache`
 --
 ALTER TABLE `tache`
-  ADD CONSTRAINT `tache_ibfk_1` FOREIGN KEY (`projet_id`) REFERENCES `projet` (`id`);
+  ADD CONSTRAINT `tache_ibfk_1` FOREIGN KEY (`projet_id`) REFERENCES `projet` (`id`),
+  ADD CONSTRAINT `tache_ibfk_2` FOREIGN KEY (`intervenant`) REFERENCES `intervenant` (`matricule`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

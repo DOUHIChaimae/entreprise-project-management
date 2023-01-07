@@ -10,6 +10,8 @@ public class Responsable {
     private String numeroTel;
     private String email;
     private String motDePasse;
+
+
     private List<Projet> projectList = new ArrayList<>();
 
     public Responsable() {
@@ -55,6 +57,13 @@ public class Responsable {
         this.nom = nom;
     }
 
+    public List<Projet> getProjectList() {
+        return projectList;
+    }
+
+    public void setProjectList(List<Projet> projectList) {
+        this.projectList = projectList;
+    }
     public String getPrenom() {
         return prenom;
     }
