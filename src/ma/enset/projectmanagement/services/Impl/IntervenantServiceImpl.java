@@ -49,4 +49,9 @@ public class IntervenantServiceImpl implements IntervenantService {
     public void updateIntervenants(Intervenant intervenant) {
         intervenantDao.modifier(intervenant);
     }
+
+    @Override
+    public Intervenant login(Intervenant intervenant) {
+        return intervenantDao.login(intervenant);
+    }
 }
