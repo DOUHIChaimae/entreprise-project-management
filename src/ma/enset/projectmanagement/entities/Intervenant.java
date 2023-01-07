@@ -11,13 +11,9 @@ public class Intervenant {
     private String email;
     private String motDePasse;
 
-    private List<Projet> projectList = new ArrayList<>();
-    public Intervenant() {
-    }
+    private List<Projet> projetList = new ArrayList<>();
 
-    public Intervenant(String email, String motDePasse) {
-        this.email = email;
-        this.motDePasse = motDePasse;
+    public Intervenant() {
     }
 
     public Intervenant(String matricule, String nom, String prenom, String numeroTel, String email, String motDePasse) {
@@ -78,23 +74,27 @@ public class Intervenant {
     }
 
     public List<Projet> getProjectList() {
-        return projectList;
+        return projetList;
     }
 
-    public void setProjectList(List<Projet> projectList) {
-        this.projectList = projectList;
+    public void setProjectList(List<Projet> projetList) {
+        this.projetList = projetList;
     }
 
     @Override
     public String toString() {
-        return "Intervenant{" +
-                "matricule='" + matricule + '\'' +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", numeroTel='" + numeroTel + '\'' +
-                ", email='" + email + '\'' +
-                ", motDePasse='" + motDePasse + '\'' +
-                ", projectListt=" + projectList +
-                '}';
+        StringBuilder str = new StringBuilder("Intervenant ayant matricule : ")
+                .append(matricule)
+                .append(",nom : ")
+                .append(nom)
+                .append(",prenom : ")
+                .append(prenom)
+                .append(",numeroTel : ")
+                .append(numeroTel)
+                .append(",email : ")
+                .append(email)
+                .append(",mot de passe :")
+                .append(motDePasse);
+        return str.toString();
     }
 }
