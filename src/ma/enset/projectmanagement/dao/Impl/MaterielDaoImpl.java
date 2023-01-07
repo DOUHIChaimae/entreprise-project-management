@@ -20,22 +20,20 @@ public class MaterielDaoImpl implements MaterielDao {
 
     @Override
     public List<Materiel> findAll() {
+        List<Materiel> materiels = new ArrayList<>();
         try {
-            PreparedStatement statement = connection.prepareStatement("select * from MATERIEL");
+            PreparedStatement statement = connection.prepareStatement("select * FROM MATERIEL");
             ResultSet rs = statement.executeQuery();
-            List<Materiel> materiels = new ArrayList<>();
             while (rs.next()) {
                 Materiel materiel = new Materiel();
                 materiel.setMatricule(rs.getString("matricule"));
                 materiel.setNomMateriel(rs.getString("nomMateriel"));
                 materiels.add(materiel);
-                return materiels;
             }
-
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
-        return null;
+        return materiels;
     }
 
     @Override
@@ -87,7 +85,7 @@ public class MaterielDaoImpl implements MaterielDao {
     @Override
     public Materiel modifier(Materiel materiel) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("update MATERIEL set nomMateriel = ?" + " where id =?");
+            PreparedStatement preparedStatement = connection.prepareStatement("update MATERIEL set nomMateriel = ?" + " where matricule =?");
             preparedStatement.setString(1, materiel.getNomMateriel());
             preparedStatement.setString(2, materiel.getMatricule());
             preparedStatement.executeUpdate();

@@ -9,4 +9,5 @@ public interface MaterielService {
     void deleteMateriel(Materiel materiel);
     List<Materiel> getAllMateriel();
     List<Materiel> chercherParNomMateriel(String nomMateriel);
+    void updateMateriel(Materiel materiel);
 }
