@@ -1,8 +1,15 @@
 package ma.enset.projectmanagement.dao.Impl;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import ma.enset.projectmanagement.dao.IntervenantDao;
 import ma.enset.projectmanagement.dao.SingletonConnexionDB;
 import ma.enset.projectmanagement.entities.Intervenant;
+import ma.enset.projectmanagement.entities.Responsable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,6 +44,28 @@ public class IntervenantDaoImpl implements IntervenantDao {
             e.printStackTrace();
         }
         return intervenants;
+    }
+
+    @Override
+    public Intervenant login(Intervenant intervenant) {
+        try {
+            PreparedStatement ps2= connection.prepareStatement("SELECT *from INTERVENANT WHERE email=? and motDePasse=?;");
+            ps2.setString(1,intervenant.getEmail());
+            ps2.setString(2,intervenant.getMotDePasse());
+            ResultSet set2 = ps2.executeQuery();
+            if (set2.next()) {
+                Intervenant intervenant1 = new Intervenant();
+                intervenant1.setMatricule(set2.getString("matricule"));
+                intervenant1.setNom(set2.getString("nom"));
+                intervenant1.setPrenom(set2.getString("prenom"));
+                intervenant1.setEmail(set2.getString("email"));
+                intervenant1.setNumeroTel(set2.getString("numeroTel"));
+               return  intervenant1;
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return null;
     }
 
     @Override

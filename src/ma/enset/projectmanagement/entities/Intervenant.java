@@ -25,6 +25,11 @@ public class Intervenant {
         this.motDePasse = motDePasse;
     }
 
+    public Intervenant(String email, String motDePasse) {
+        this.email = email;
+        this.motDePasse = motDePasse;
+    }
+
     public String getMatricule() {
         return matricule;
     }

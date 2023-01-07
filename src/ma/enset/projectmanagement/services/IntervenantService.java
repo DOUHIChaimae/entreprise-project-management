@@ -13,4 +13,7 @@ public interface IntervenantService {
     void  addIntervenants(Intervenant i);
     void deleteIntervenants(Intervenant  i);
     void updateIntervenants(Intervenant i);
+    Intervenant login(Intervenant intervenant);
+
+
 }

@@ -1,8 +1,7 @@
-package ma.enset.projectmanagement.dao;
+package ma.enset.projectmanagement.services;
 
 import ma.enset.projectmanagement.entities.Responsable;
 
-public interface ResponsableDao extends CrudDao<Responsable> {
+public interface ResponsableService {
     Responsable login(Responsable responsable);
-
 }

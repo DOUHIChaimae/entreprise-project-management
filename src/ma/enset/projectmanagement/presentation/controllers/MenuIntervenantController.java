@@ -49,7 +49,7 @@ public class MenuIntervenantController implements Initializable {
         Scene scene = new Scene(root);
         stage1.setScene(scene);
         stage1.initStyle(StageStyle.UNDECORATED);
-        stage1.getIcons().add(new Image("ma/enset/projectmanagement/ressources/icon.png"));
+        stage1.getIcons().add(new Image("ma/enset/projectmanagement/presentation/ressources/icon.png"));
         stage1.show();
     }
     @FXML
