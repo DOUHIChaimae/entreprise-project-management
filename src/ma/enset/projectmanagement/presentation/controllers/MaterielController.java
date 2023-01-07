@@ -11,12 +11,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import ma.enset.projectmanagement.dao.Impl.MaterielDaoImpl;
 import ma.enset.projectmanagement.entities.Materiel;
-import ma.enset.projectmanagement.entities.Projet;
 import ma.enset.projectmanagement.services.Impl.MaterielServiceImpl;
 import ma.enset.projectmanagement.services.MaterielService;
 
 import java.net.URL;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
