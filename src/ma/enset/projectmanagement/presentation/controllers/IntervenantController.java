@@ -16,6 +16,7 @@ import ma.enset.projectmanagement.services.IntervenantService;
 
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class IntervenantController implements Initializable {
@@ -77,6 +78,84 @@ public class IntervenantController implements Initializable {
                 intervenantObservableList.addAll(intervenantService.getIntervenantsParNom(search.getText()));
             }
         });
+
+    }
+    public  void ajouterIntervenant(){
+        try {
+            if (isOneOfTheseTextFieldsEmpty(matriculeTextField,nomTextField)) {
+                alert.setAlertType(Alert.AlertType.WARNING);
+                setAlertContent("Veuillez remplir tous les champs correctement !");
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.OK) alert.close();
+            } else {
+                String matricule = matriculeTextField.getText().trim();
+                String nom = nomTextField.getText().trim();
+                String prenom = prenomTextField.getText().trim();
+                String email = emailTextField.getText().trim();
+                String tel = telTextField.getText().trim();
+                intervenantService.addIntervenants(new Intervenant(matricule, nom,prenom,tel,email,"12345678"));
+                clear();
+                populateIntervenantTableView();
+                alert.setAlertType(Alert.AlertType.INFORMATION);
+                setAlertContent("L'opération s'est terminée avec succès !");
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.OK) alert.close();
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+    public void  modifierInterevenant(){
+        try {
+            if (isOneOfTheseTextFieldsEmpty(matriculeTextField,nomTextField)) {
+                alert.setAlertType(Alert.AlertType.WARNING);
+                setAlertContent("Veuillez remplir tous les champs correctement !");
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.OK) alert.close();
+            } else {
+                String matricule = matriculeTextField.getText().trim();
+                String nom = nomTextField.getText().trim();
+                String prenom = prenomTextField.getText().trim();
+                String email = emailTextField.getText().trim();
+                String tel = telTextField.getText().trim();
+                intervenantService.updateIntervenants(new Intervenant(matricule, nom,prenom,tel,email,"12345678"));
+                clear();
+                populateIntervenantTableView();
+                alert.setAlertType(Alert.AlertType.INFORMATION);
+                setAlertContent("L'opération s'est terminée avec succès !");
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.OK) alert.close();
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void supprimerIntervenant(){
+        Intervenant intervenant = intervenantTableView.getSelectionModel().getSelectedItem();
+        if (intervenant != null) {
+            alert.setAlertType(Alert.AlertType.CONFIRMATION);
+            setAlertContent("Êtes-vous sûr de vouloir supprimer ce intervenant ?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                try {
+                    intervenantService.deleteIntervenants(intervenant);
+                    populateIntervenantTableView();
+                    alert.setAlertType(Alert.AlertType.INFORMATION);
+                    setAlertContent("L'opération s'est terminée avec succès !");
+                    alert.showAndWait();
+                    clear();
+                    if (alert.getResult() == ButtonType.OK) alert.close();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        } else {
+            alert.setAlertType(Alert.AlertType.WARNING);
+            setAlertContent("Veuillez sélectionner un élément pour effectuer cette opération !");
+            alert.show();
+        }
 
     }
     public boolean isOneOfTheseTextFieldsEmpty(TextField... textFields) {
