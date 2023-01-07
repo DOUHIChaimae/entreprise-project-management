@@ -52,7 +52,7 @@ public class MenuResponsableController implements Initializable {
         }
     }
     @FXML
-    private void loadHomeView(ActionEvent e) {
+    private void loadTacheView(ActionEvent e) {
         loadFXML("homeRespoView");
     }
     @FXML
@@ -69,7 +69,7 @@ public class MenuResponsableController implements Initializable {
     }
     @FXML
     private void loadSettingView(ActionEvent e) {
-        loadFXML("settingView");
+        loadFXML("responsableSettingView");
     }
     @FXML
     public  void logout() throws IOException {
