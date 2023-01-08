@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class FileUtils {
+public final class FileUtils {
     public static String mapperToFIle(Queue<String> lines, String fileName) {
         String file = String.format("%s.txt", fileName);
         try (FileWriter fileWriter= new FileWriter(file); BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
