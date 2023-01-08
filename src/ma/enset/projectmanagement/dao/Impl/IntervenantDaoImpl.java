@@ -60,6 +60,7 @@ public class IntervenantDaoImpl implements IntervenantDao {
                 intervenant1.setPrenom(set2.getString("prenom"));
                 intervenant1.setEmail(set2.getString("email"));
                 intervenant1.setNumeroTel(set2.getString("numeroTel"));
+                intervenant1.setMotDePasse(set2.getString("motDePasse"));
                return  intervenant1;
             }
         } catch (SQLException exception) {

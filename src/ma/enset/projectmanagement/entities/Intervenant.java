@@ -88,18 +88,7 @@ public class Intervenant {
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder("Intervenant ayant matricule : ")
-                .append(matricule)
-                .append(",nom : ")
-                .append(nom)
-                .append(",prenom : ")
-                .append(prenom)
-                .append(",numeroTel : ")
-                .append(numeroTel)
-                .append(",email : ")
-                .append(email)
-                .append(",mot de passe :")
-                .append(motDePasse);
+        StringBuilder str = new StringBuilder().append(matricule);
         return str.toString();
     }
 }

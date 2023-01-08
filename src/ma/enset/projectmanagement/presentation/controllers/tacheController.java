@@ -4,16 +4,22 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
-import javafx.util.Callback;
+import ma.enset.projectmanagement.dao.Impl.IntervenantDaoImpl;
 import ma.enset.projectmanagement.dao.Impl.ProjetDaoImpl;
-import ma.enset.projectmanagement.entities.Projet;
+import ma.enset.projectmanagement.dao.Impl.TacheDaoImpl;
+import ma.enset.projectmanagement.entities.*;
+import ma.enset.projectmanagement.services.Impl.IntervenantServiceImpl;
 import ma.enset.projectmanagement.services.Impl.ProjetServiceImpl;
+import ma.enset.projectmanagement.services.Impl.TacheServiceImpl;
+import ma.enset.projectmanagement.services.IntervenantService;
 import ma.enset.projectmanagement.services.ProjetService;
+import ma.enset.projectmanagement.services.TacheService;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -22,9 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class ProjectController implements Initializable {
-    @FXML
-    private  TextField search;
+public class tacheController implements Initializable {
     @FXML
     private TextField titreTextField;
     @FXML
@@ -34,13 +38,28 @@ public class ProjectController implements Initializable {
     @FXML
     private DatePicker dateFinDatePicker;
     @FXML
-    public TableView<Projet> projetsTableView;
-    public ProjetService projetService;
-    public ObservableList<Projet> projetObservableList = FXCollections.observableArrayList();
-    public Alert alert;
+    private ComboBox projetComboBox;
+    @FXML
+    private ComboBox intervenantCombox;
+    @FXML
+    private ComboBox projetComboBox2;
 
-    public ProjectController() {
+    @FXML
+    private TextField search;
+    TacheService tacheService;
+    ProjetService projetService;
+    IntervenantService intervenantService;
+
+    @FXML
+    private TableView<Tache> tachesTableView;
+    Alert alert;
+
+    ObservableList<Tache> tacheObservableList = FXCollections.observableArrayList();
+
+    public tacheController() {
         this.projetService = new ProjetServiceImpl(new ProjetDaoImpl());
+        this.tacheService = new TacheServiceImpl(new TacheDaoImpl());
+        this.intervenantService = new IntervenantServiceImpl(new IntervenantDaoImpl());
     }
 
     @Override
@@ -52,31 +71,39 @@ public class ProjectController implements Initializable {
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../ressources/styles/dialog.css")).toExternalForm());
         ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Ok");
-        projetsTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
-        projetsTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("titre"));
-        projetsTableView.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("description"));
-        projetsTableView.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("dateDebut"));
-        projetsTableView.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("dateFin"));
-        populateProjectTableView();
-        projetsTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Projet>() {
+
+        projetComboBox.getItems().addAll(projetService.getAllProjectsByResponsable(LoginController.responsable));
+        intervenantCombox.getItems().addAll(intervenantService.getAllIntervenants());
+        projetComboBox2.getItems().addAll(projetService.getAllProjectsByResponsable(LoginController.responsable));
+
+        tachesTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
+        tachesTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("titre"));
+        tachesTableView.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("description"));
+        tachesTableView.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("dateDebut"));
+        tachesTableView.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("dateFin"));
+        populateTacheTableView();
+        tachesTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tache>() {
             @Override
-            public void changed(ObservableValue<? extends Projet> observable, Projet oldValue, Projet newValue) {
-               if(projetsTableView.getSelectionModel().getSelectedItem()!=null)
-               {
-                   titreTextField.setText(projetsTableView.getSelectionModel().getSelectedItem().getTitre().trim());
-                   descriptionTextField.setText(projetsTableView.getSelectionModel().getSelectedItem().getDescription().trim());
-                   dateDebutDatePicker.setValue(LocalDate.parse(projetsTableView.getSelectionModel().getSelectedItem().getDateDebut().toString().trim()));
-                   dateFinDatePicker.setValue(LocalDate.parse(projetsTableView.getSelectionModel().getSelectedItem().getDateFin().toString().trim()));
-               }
+            public void changed(ObservableValue<? extends Tache> observable, Tache oldValue, Tache newValue) {
+                if (tachesTableView.getSelectionModel().getSelectedItem() != null) {
+                    titreTextField.setText(tachesTableView.getSelectionModel().getSelectedItem().getTitre().trim());
+                    descriptionTextField.setText(tachesTableView.getSelectionModel().getSelectedItem().getDescription().trim());
+                    dateDebutDatePicker.setValue(LocalDate.parse(tachesTableView.getSelectionModel().getSelectedItem().getDateDebut().toString()));
+                    dateFinDatePicker.setValue(LocalDate.parse(tachesTableView.getSelectionModel().getSelectedItem().getDateFin().toString()));
+                    projetComboBox.setValue(tachesTableView.getSelectionModel().getSelectedItem().getProjet());
+                    intervenantCombox.setValue(tachesTableView.getSelectionModel().getSelectedItem().getIntervenant());
+
+                }
             }
         });
         search.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                projetObservableList.clear();
-                projetObservableList.addAll(projetService.chercherParTitre(search.getText()));
+                tacheObservableList.clear();
+                tacheObservableList.addAll(tacheService.rechercherParMot(search.getText()));
             }
         });
+
 
     }
 
@@ -98,9 +125,20 @@ public class ProjectController implements Initializable {
         for (TextField textField : textFields) textField.clear();
     }
 
-    public void ajouterProjet() {
+    public void clear() {
+        clearTextFields(titreTextField);
+        descriptionTextField.clear();
+        dateDebutDatePicker.setValue(null);
+        dateFinDatePicker.setValue(null);
+        projetComboBox.getItems().clear();
+        intervenantCombox.getItems().clear();
+        projetComboBox.getItems().addAll(projetService.getAllProjectsByResponsable(LoginController.responsable));
+        intervenantCombox.getItems().addAll(intervenantService.getAllIntervenants());
+    }
+
+    public void ajouterTache() {
         try {
-            if (isOneOfTheseTextFieldsEmpty(titreTextField) && descriptionTextField.getText().isEmpty()) {
+            if (isOneOfTheseTextFieldsEmpty(titreTextField)) {
                 alert.setAlertType(Alert.AlertType.WARNING);
                 setAlertContent("Veuillez remplir tous les champs correctement !");
                 alert.showAndWait();
@@ -110,9 +148,39 @@ public class ProjectController implements Initializable {
                 String description = descriptionTextField.getText().trim();
                 Date dateDebut = java.sql.Date.valueOf(dateDebutDatePicker.getValue());
                 Date dateFin = java.sql.Date.valueOf(dateFinDatePicker.getValue());
-                projetService.addProject(new Projet(titre, description, dateDebut, dateFin, LoginController.responsable));
+                Projet projet = (Projet) projetComboBox.getSelectionModel().getSelectedItem();
+                Intervenant intervenant = (Intervenant) intervenantCombox.getSelectionModel().getSelectedItem();
+                tacheService.addTache(new Tache(titre, dateDebut, dateFin, description, projet, intervenant, Etat.A_FAIRE));
                 clear();
-                populateProjectTableView();
+                populateTacheTableView();
+                alert.setAlertType(Alert.AlertType.INFORMATION);
+                setAlertContent("L'opération s'est terminée avec succès !");
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.OK) alert.close();
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+    public void modifierTache() {
+        try {
+            if (isOneOfTheseTextFieldsEmpty(titreTextField)) {
+                alert.setAlertType(Alert.AlertType.WARNING);
+                setAlertContent("Veuillez remplir tous les champs correctement !");
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.OK) alert.close();
+            } else {
+                String titre = titreTextField.getText().trim();
+                String description = descriptionTextField.getText().trim();
+                Date dateDebut = java.sql.Date.valueOf(dateDebutDatePicker.getValue());
+                Date dateFin = java.sql.Date.valueOf(dateFinDatePicker.getValue());
+                Projet projet = (Projet) projetComboBox.getSelectionModel().getSelectedItem();
+                Intervenant intervenant = (Intervenant) intervenantCombox.getSelectionModel().getSelectedItem();
+                tacheService.updateTache(new Tache(tachesTableView.getSelectionModel().getSelectedItem().getId(),titre, dateDebut, dateFin, description, projet, intervenant, tachesTableView.getSelectionModel().getSelectedItem().getEtat()));
+                clear();
+                populateTacheTableView();
                 alert.setAlertType(Alert.AlertType.INFORMATION);
                 setAlertContent("L'opération s'est terminée avec succès !");
                 alert.showAndWait();
@@ -125,44 +193,16 @@ public class ProjectController implements Initializable {
 
     }
 
-    public void modifierProjet() {
-        try {
-            if (isOneOfTheseTextFieldsEmpty(titreTextField) && descriptionTextField.getText().isEmpty()) {
-                alert.setAlertType(Alert.AlertType.WARNING);
-                setAlertContent("Veuillez remplir tous les champs correctement !");
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.OK) alert.close();
-            } else {
-                int id = projetsTableView.getSelectionModel().getSelectedItem().getId();
-                String titre = titreTextField.getText().trim();
-                String description = descriptionTextField.getText().trim();
-                Date dateDebut = java.sql.Date.valueOf(dateDebutDatePicker.getValue());
-                Date dateFin = java.sql.Date.valueOf(dateFinDatePicker.getValue());
-                Projet projet = new Projet(titre, description, dateDebut, dateFin, LoginController.responsable);
-                projet.setId(id);
-                projetService.update(projet);
-                clear();
-                populateProjectTableView();
-                alert.setAlertType(Alert.AlertType.INFORMATION);
-                setAlertContent("L'opération s'est terminée avec succès !");
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.OK) alert.close();
-            }
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-    public void supprimerProjet(){
-        Projet p = projetsTableView.getSelectionModel().getSelectedItem();
+    public void supprimerTache(){
+        Tache p = tachesTableView.getSelectionModel().getSelectedItem();
         if (p != null) {
             alert.setAlertType(Alert.AlertType.CONFIRMATION);
             setAlertContent("Êtes-vous sûr de vouloir supprimer ce projet ?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 try {
-                    projetService.deleteProject(p);
-                    populateProjectTableView();
+                    tacheService.deleteTache(p);
+                    populateTacheTableView();
                     alert.setAlertType(Alert.AlertType.INFORMATION);
                     setAlertContent("L'opération s'est terminée avec succès !");
                     alert.showAndWait();
@@ -178,20 +218,18 @@ public class ProjectController implements Initializable {
             alert.show();
         }
     }
-    public void clear(){
-        clearTextFields(titreTextField);
-        descriptionTextField.clear();
-        dateFinDatePicker.setValue(null);
-        dateDebutDatePicker.setValue(null);
+
+    public void searchTacheController(){
+        tacheObservableList.clear();
+        tacheObservableList.addAll(tacheService.tacheProjet((Projet)projetComboBox2.getSelectionModel().getSelectedItem()));
     }
-    public void populateProjectTableView() {
+    public void populateTacheTableView() {
         try {
-            projetsTableView.getItems().clear();
-            projetObservableList.addAll(projetService.getAllProjectsByResponsable(LoginController.responsable));
-            projetsTableView.setItems(projetObservableList);
+            tachesTableView.getItems().clear();
+            tacheObservableList.addAll(tacheService.getTacheProjetRespo(LoginController.responsable));
+            tachesTableView.setItems(tacheObservableList);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
-
 }

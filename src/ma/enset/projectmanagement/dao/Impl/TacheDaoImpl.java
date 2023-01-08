@@ -2,10 +2,7 @@ package ma.enset.projectmanagement.dao.Impl;
 
 import ma.enset.projectmanagement.dao.SingletonConnexionDB;
 import ma.enset.projectmanagement.dao.TacheDao;
-import ma.enset.projectmanagement.entities.Etat;
-import ma.enset.projectmanagement.entities.Projet;
-import ma.enset.projectmanagement.entities.Responsable;
-import ma.enset.projectmanagement.entities.Tache;
+import ma.enset.projectmanagement.entities.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -85,8 +82,32 @@ public class TacheDaoImpl implements TacheDao {
     }
 
     @Override
-    public Tache ajouter(Tache tache) {
+    public List<Tache> findByTitre(String titre) {
         Connection connection = SingletonConnexionDB.getConnections();
+        List<Tache> taches = new ArrayList<>();
+        try {
+            PreparedStatement stm = connection.prepareStatement("select * from TACHE where titre like?");
+            stm.setString(1, "%"+titre+"%");
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Tache tache=new Tache();
+                tache.setId(rs.getInt("ID"));
+                tache.setTitre(rs.getString("titre"));
+                tache.setDateDebut(rs.getDate("dateDebut"));
+                tache.setDateFin(rs.getDate("dateFin"));
+                tache.setDescription(rs.getString("description"));
+                tache.setEtat(Etat.valueOf(rs.getString("etat")));
+                taches.add(tache);
+            }
+            return taches;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Tache ajouter(Tache tache) {
         try {
             PreparedStatement pstm = connection.prepareStatement("insert into TACHE(id,titre,description,dateDebut,dateFin,etat,projet_id,intervenant)" +
                     "   values(?,?,?,?,?,?,?,?)");
@@ -107,7 +128,6 @@ public class TacheDaoImpl implements TacheDao {
 
     @Override
     public boolean supprimer(Tache tache) {
-        Connection connection = SingletonConnexionDB.getConnections();
         try {
             PreparedStatement pstm = connection.prepareStatement("delete from TACHE where ID=?");
             pstm.setInt(1, tache.getId());
@@ -120,15 +140,16 @@ public class TacheDaoImpl implements TacheDao {
 
     @Override
     public Tache modifier(Tache o) {
-        Connection connection = SingletonConnexionDB.getConnections();
         try {
-            PreparedStatement pstm = connection.prepareStatement("update TACHE set descriptionTache=?,dateDebut=?,dateFin=?,etat=?, projet_id=? where ID=?");
-            pstm.setString(1, o.getDescription());
-            pstm.setDate(2, new java.sql.Date(o.getDateDebut().getTime()));
-            pstm.setDate(3, new java.sql.Date(o.getDateFin().getTime()));
-            pstm.setString(4, o.getEtat().toString());
-            pstm.setInt(5, o.getProject().getId());
-            pstm.setInt(6, o.getId());
+            PreparedStatement pstm = connection.prepareStatement("update TACHE set titre=?,description=?,dateDebut=?,dateFin=?,etat=?, projet_id=? , intervenant=? where ID=?");
+            pstm.setString(1, o.getTitre());
+            pstm.setString(2, o.getDescription());
+            pstm.setDate(3, new java.sql.Date(o.getDateDebut().getTime()));
+            pstm.setDate(4, new java.sql.Date(o.getDateFin().getTime()));
+            pstm.setString(5, o.getEtat().toString());
+            pstm.setInt(6, o.getProject().getId());
+            pstm.setString(7, o.getIntervenant().getMatricule());
+            pstm.setInt(8, o.getId());
             pstm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,8 +158,31 @@ public class TacheDaoImpl implements TacheDao {
     }
 
     @Override
+    public List<Tache> tachesProjet(Projet projet) {
+        List<Tache> taches = new ArrayList<>();
+        try {
+            PreparedStatement stm = connection.prepareStatement("select * from TACHE where projet_id=?");
+            stm.setInt(1, projet.getId());
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Tache tache=new Tache();
+                tache.setId(rs.getInt("ID"));
+                tache.setTitre(rs.getString("titre"));
+                tache.setDateDebut(rs.getDate("dateDebut"));
+                tache.setDateFin(rs.getDate("dateFin"));
+                tache.setDescription(rs.getString("description"));
+                tache.setEtat(Etat.valueOf(rs.getString("etat")));
+                taches.add(tache);
+            }
+            return taches;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public void prolongerTache(Tache tache, Date dateFin) {
-        Connection connection = SingletonConnexionDB.getConnections();
         try {
             PreparedStatement pstm = connection.prepareStatement("update TACHE set dateFin=? where ID=?");
             pstm.setDate(1, new java.sql.Date(dateFin.getTime()));
@@ -150,19 +194,38 @@ public class TacheDaoImpl implements TacheDao {
     }
 
     @Override
-    public void modifierEtatTache(Tache tache, Etat etat) {
-        Connection connection = SingletonConnexionDB.getConnections();
+    public void modifierEtatTache(Tache tache) {
         try {
-            PreparedStatement pstm = connection.prepareStatement("update TACHE set descriptionTache=?,dateDebut=?,dateFin=?,etat=?, projet_id=? where ID=?");
-            pstm.setString(1, tache.getDescription());
-            pstm.setDate(2, new java.sql.Date(tache.getDateDebut().getTime()));
-            pstm.setDate(3, new java.sql.Date(tache.getDateFin().getTime()));
-            pstm.setString(4, etat.toString());
-            pstm.setInt(5, tache.getProject().getId());
-            pstm.setInt(6, tache.getId());
+            PreparedStatement pstm = connection.prepareStatement("update TACHE set etat=? where ID=?");
+            pstm.setString(1, tache.getEtat().toString());
+            pstm.setInt(2, tache.getId());
             pstm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    @Override
+    public List<Tache> tachesIntervenant(Intervenant intervenant) {
+        List<Tache> taches = new ArrayList<>();
+        try {
+            PreparedStatement stm = connection.prepareStatement("select * from TACHE where intervenant=?");
+            stm.setString(1, intervenant.getMatricule());
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Tache tache=new Tache();
+                tache.setId(rs.getInt("ID"));
+                tache.setTitre(rs.getString("titre"));
+                tache.setDateDebut(rs.getDate("dateDebut"));
+                tache.setDateFin(rs.getDate("dateFin"));
+                tache.setDescription(rs.getString("description"));
+                tache.setEtat(Etat.valueOf(rs.getString("etat")));
+                taches.add(tache);
+            }
+            return taches;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
