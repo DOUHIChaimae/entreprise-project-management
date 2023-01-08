@@ -30,6 +30,17 @@ public class Tache {
         this.etat = etat;
     }
 
+    public Tache(int id, String titre, Date dateDebut, Date dateFin, String description, Projet projet, Intervenant intervenant, Etat etat) {
+        this.id = id;
+        this.titre = titre;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.description = description;
+        this.projet = projet;
+        this.intervenant = intervenant;
+        this.etat = etat;
+    }
+
     public Tache(String titre, Date dateDebut, Date dateFin, String description, Projet projet, Intervenant intervenant, Etat etat) {
         this.titre = titre;
         this.dateDebut = dateDebut;
@@ -37,6 +48,10 @@ public class Tache {
         this.description = description;
         this.projet = projet;
         this.intervenant = intervenant;
+        this.etat = etat;
+    }
+
+    public Tache(int id, Etat etat) {
         this.etat = etat;
     }
 

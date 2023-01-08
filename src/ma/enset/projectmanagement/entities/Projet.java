@@ -98,17 +98,8 @@ public class Projet {
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder("Project\n")
-                .append("id : ")
-                .append(id)
-                .append("\ntitre du projet : ")
-                .append(titre)
-                .append("\ndescription : ")
-                .append(description)
-                .append("\ndate de début : ")
-                .append(dateDebut)
-                .append("\ndate de fin : ")
-                .append(dateFin);
+        StringBuilder str = new StringBuilder().append(titre);
+
         return str.toString();
 
     }
