@@ -4,7 +4,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -41,8 +40,6 @@ public class tacheController implements Initializable {
     private ComboBox projetComboBox;
     @FXML
     private ComboBox intervenantCombox;
-    @FXML
-    private ComboBox projetComboBox2;
 
     @FXML
     private TextField search;
@@ -74,7 +71,6 @@ public class tacheController implements Initializable {
 
         projetComboBox.getItems().addAll(projetService.getAllProjectsByResponsable(LoginController.responsable));
         intervenantCombox.getItems().addAll(intervenantService.getAllIntervenants());
-        projetComboBox2.getItems().addAll(projetService.getAllProjectsByResponsable(LoginController.responsable));
 
         tachesTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
         tachesTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("titre"));
@@ -219,10 +215,7 @@ public class tacheController implements Initializable {
         }
     }
 
-    public void searchTacheController(){
-        tacheObservableList.clear();
-        tacheObservableList.addAll(tacheService.tacheProjet((Projet)projetComboBox2.getSelectionModel().getSelectedItem()));
-    }
+
     public void populateTacheTableView() {
         try {
             tachesTableView.getItems().clear();
