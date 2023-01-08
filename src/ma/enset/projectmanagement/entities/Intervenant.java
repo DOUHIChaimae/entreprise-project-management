@@ -1,9 +1,15 @@
 package ma.enset.projectmanagement.entities;
 
+import ma.enset.projectmanagement.utils.StringUtils;
+import ma.enset.projectmanagement.utils.files.FileMappable;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class Intervenant {
+public class Intervenant implements FileMappable<Intervenant> {
+    public static final String INTERVENANT = "INTERVENANT";
+
     private String matricule;
     private String nom;
     private String prenom;
@@ -90,5 +96,23 @@ public class Intervenant {
     public String toString() {
         StringBuilder str = new StringBuilder().append(matricule);
         return str.toString();
+    }
+    @Override
+    public String mapperToLine() {
+        return String.join(StringUtils.SEMI_COLON,
+                Arrays.asList(
+                        INTERVENANT, matricule, nom, prenom, numeroTel, email
+                ));
+    }
+
+    public static Intervenant mapperInfosFromLine(String line) {
+        final Intervenant intervenant = new Intervenant();
+        String[] infos = line.split(StringUtils.SEMI_COLON.toString());
+        intervenant.setMatricule(infos[1]);
+        intervenant.setNom(infos[2]);
+        intervenant.setPrenom(infos[3]);
+        intervenant.setNumeroTel(infos[4]);
+        intervenant.setEmail(infos[5]);
+        return intervenant;
     }
 }

@@ -1,8 +1,17 @@
 package ma.enset.projectmanagement.entities;
 
-import java.util.Date;
+import ma.enset.projectmanagement.utils.DateUtils;
+import ma.enset.projectmanagement.utils.StringUtils;
+import ma.enset.projectmanagement.utils.files.FileMappable;
 
-public class Tache {
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Objects;
+
+public class Tache implements FileMappable<Tache> {
+    public static final String TACHE = "RESPONSABLE";
+
     private int id;
     private String titre;
     private Date dateDebut;
@@ -141,5 +150,37 @@ public class Tache {
                 "\nCette tache est afféctée aux projets " + projet +
                 "intervenant" + intervenant +
                 "\netat : " + etat;
+    }
+    @Override
+    public String mapperToLine() {
+        return String.join(StringUtils.SEMI_COLON,
+                Arrays.asList(
+                        TACHE,
+                        titre,
+                        etat.toString(),
+                        Objects.isNull(dateDebut) ? StringUtils.UNDERSCORE : dateDebut.toString(),
+                        Objects.isNull(dateFin) ? StringUtils.UNDERSCORE : dateFin.toString(),
+                        description,
+                        intervenant.getMatricule()
+                ));
+    }
+
+
+    public static Tache mapperInfosFromLine(String line) throws ParseException {
+        final Tache tache = new Tache();
+        String[] infos = line.split(StringUtils.SEMI_COLON.toString());
+        tache.setTitre(infos[1]);
+        tache.setEtat(Etat.valueOf(infos[2]));
+        if(!StringUtils.isBlank(infos[3]) && !StringUtils.UNDERSCORE.equals(infos[3]))
+            tache.setDateDebut(DateUtils.from(infos[3]));
+        if(!StringUtils.isBlank(infos[4]) && !StringUtils.UNDERSCORE.equals(infos[4]))
+            tache.setDateFin(DateUtils.from(infos[4]));
+        tache.setDescription(infos[5]);
+        if(!StringUtils.isBlank(infos[6])) {
+            Intervenant intervenant = new Intervenant();
+            intervenant.setMatricule(infos[6]);
+            tache.setIntervenant(intervenant);
+        }
+        return tache;
     }
 }

@@ -13,5 +13,6 @@ public interface TacheDao extends CrudDao<Tache>{
 
     List<Tache> tachesProjet(Projet projet);
     List<Tache> tachesIntervenant(Intervenant intervenant);
+    public List<Tache> getTasksOfProject(int projectId);
 
 }

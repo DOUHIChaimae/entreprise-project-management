@@ -8,5 +8,8 @@ import java.util.List;
 public interface ProjetDao extends CrudDao<Projet> {
     List<Projet> chercherParTitre(String titreProjet);
     List<Projet> findAllProjectByResponsable(Responsable responsable);
+    Projet getProjetWithResposableByProjectId(int projetId);
+
+    int findProjectIdByTitre(String titre);
 
 }

@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class TacheDaoImpl implements TacheDao {
     public List<Tache> findAllTache(Responsable responsable) {
         List<Tache> taches = new ArrayList<>();
         ProjetDaoImpl projetDao = new ProjetDaoImpl();
-        IntervenantDaoImpl intervenantDao=new IntervenantDaoImpl();
+        IntervenantDaoImpl intervenantDao = new IntervenantDaoImpl();
         List<Projet> projets = projetDao.findAllProjectByResponsable(responsable);
         for (Projet projet : projets) {
             try {
@@ -53,6 +54,7 @@ public class TacheDaoImpl implements TacheDao {
         }
         return null;
     }
+
     @Override
     public List<Tache> findAll() {
         return null;
@@ -87,10 +89,10 @@ public class TacheDaoImpl implements TacheDao {
         List<Tache> taches = new ArrayList<>();
         try {
             PreparedStatement stm = connection.prepareStatement("select * from TACHE where titre like?");
-            stm.setString(1, "%"+titre+"%");
+            stm.setString(1, "%" + titre + "%");
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Tache tache=new Tache();
+                Tache tache = new Tache();
                 tache.setId(rs.getInt("ID"));
                 tache.setTitre(rs.getString("titre"));
                 tache.setDateDebut(rs.getDate("dateDebut"));
@@ -165,7 +167,7 @@ public class TacheDaoImpl implements TacheDao {
             stm.setInt(1, projet.getId());
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Tache tache=new Tache();
+                Tache tache = new Tache();
                 tache.setId(rs.getInt("ID"));
                 tache.setTitre(rs.getString("titre"));
                 tache.setDateDebut(rs.getDate("dateDebut"));
@@ -204,6 +206,7 @@ public class TacheDaoImpl implements TacheDao {
             e.printStackTrace();
         }
     }
+
     @Override
     public List<Tache> tachesIntervenant(Intervenant intervenant) {
         List<Tache> taches = new ArrayList<>();
@@ -212,7 +215,7 @@ public class TacheDaoImpl implements TacheDao {
             stm.setString(1, intervenant.getMatricule());
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Tache tache=new Tache();
+                Tache tache = new Tache();
                 tache.setId(rs.getInt("ID"));
                 tache.setTitre(rs.getString("titre"));
                 tache.setDateDebut(rs.getDate("dateDebut"));
@@ -226,6 +229,33 @@ public class TacheDaoImpl implements TacheDao {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<Tache> getTasksOfProject(int projectId) {
+        Connection connection = SingletonConnexionDB.getConnections();
+        List<Tache> taches = new ArrayList<>();
+        try {
+            PreparedStatement stm = connection.prepareStatement("select * from TACHE where projet_id=?");
+            stm.setInt(1, projectId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Tache tache = new Tache();
+                tache.setId(rs.getInt("ID"));
+                tache.setTitre(rs.getString("titre"));
+                tache.setDateDebut(rs.getDate("dateDebut"));
+                tache.setDateFin(rs.getDate("dateFin"));
+                tache.setDescription(rs.getString("description"));
+                tache.setEtat(Etat.valueOf(rs.getString("etat")));
+                IntervenantDaoImpl intervenantDao = new IntervenantDaoImpl();
+                tache.setIntervenant(intervenantDao.findByMatricule(rs.getString("intervenant")));
+                taches.add(tache);
+            }
+            return taches;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
 
 }

@@ -21,6 +21,49 @@ public class ProjetDaoImpl implements ProjetDao {
         return null;
     }
 
+    private static Projet mapperResultSetToProjectWithResponsable(ResultSet res) throws SQLException {
+        Projet project = mapperResultSetToProjet(res);
+        project.setResponsable(mapperResultSetToResponsable(res));
+        return project;
+    }
+
+    private static Responsable mapperResultSetToResponsable(ResultSet res) throws SQLException {
+        Responsable responsable = new Responsable();
+        responsable.setMatricule(res.getString("matricule"));
+        responsable.setNom(res.getString("nom"));
+        responsable.setPrenom(res.getString("prenom"));
+        responsable.setEmail(res.getString("email"));
+        return responsable;
+    }
+
+    @Override
+    public Projet getProjetWithResposableByProjectId(int projetId) {
+        try {
+            PreparedStatement pstm = connection.prepareStatement("SELECT * from PROJET,RESPONSABLE" +
+                    " where PROJET.id = ? and PROJET.responsable_id=RESPONSABLE.matricule");
+            pstm.setInt(1, projetId);
+            ResultSet res = pstm.executeQuery();
+            if (res.next())
+                return mapperResultSetToProjectWithResponsable(res);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public int findProjectIdByTitre(String titre) {
+        try {
+            PreparedStatement pstm = connection.prepareStatement(String.format("SELECT id from PROJET where titre ='%s'", titre));
+            ResultSet res = pstm.executeQuery();
+            if (res.next())
+                return res.getInt("id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     @Override
     public Projet findById(int id) {
         try {
@@ -65,7 +108,7 @@ public class ProjetDaoImpl implements ProjetDao {
     public boolean supprimer(Projet project) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("delete from PROJET where id =?");
-            preparedStatement.setLong(1,project.getId());
+            preparedStatement.setLong(1, project.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException sql) {
             System.out.println(sql.getMessage());
@@ -131,18 +174,22 @@ public class ProjetDaoImpl implements ProjetDao {
             ResultSet rs = statement.executeQuery();
             List<Projet> projects = new ArrayList<>();
             while (rs.next()) {
-                Projet project = new Projet();
-                project.setId(rs.getInt("id"));
-                project.setTitre(rs.getString("titre"));
-                project.setDescription(rs.getString("description"));
-                project.setDateDebut(rs.getDate("datedebut"));
-                project.setDateFin(rs.getDate("dateFin"));
-                projects.add(project);
+                projects.add(mapperResultSetToProjet(rs));
             }
             return projects;
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
         return null;
+    }
+
+    private static Projet mapperResultSetToProjet(ResultSet rs) throws SQLException {
+        Projet project = new Projet();
+        project.setId(rs.getInt("id"));
+        project.setTitre(rs.getString("titre"));
+        project.setDescription(rs.getString("description"));
+        project.setDateDebut(rs.getDate("datedebut"));
+        project.setDateFin(rs.getDate("dateFin"));
+        return project;
     }
 }

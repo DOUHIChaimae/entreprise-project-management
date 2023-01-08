@@ -45,6 +45,23 @@ public class ResponsableDaoImpl implements ResponsableDao {
         }
         return null;
     }
+    @Override
+    public Responsable ajouter(Responsable o) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into RESPONSABLE(matricule,nom, prenom,numeroTel,email, motDePasse)" +
+                    "values (?,?,?,?,?, ?)");
+            preparedStatement.setString(1, o.getMatricule());
+            preparedStatement.setString(2, o.getNom());
+            preparedStatement.setString(3, o.getPrenom());
+            preparedStatement.setString(4, o.getNumeroTel());
+            preparedStatement.setString(5, o.getEmail());
+            preparedStatement.setString(6, "123");
+            preparedStatement.executeUpdate();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return o;
+    }
 
     @Override
     public List<Responsable> findAll() {
@@ -56,10 +73,6 @@ public class ResponsableDaoImpl implements ResponsableDao {
         return null;
     }
 
-    @Override
-    public Responsable ajouter(Responsable o) {
-        return null;
-    }
 
     @Override
     public boolean supprimer(Responsable o) {

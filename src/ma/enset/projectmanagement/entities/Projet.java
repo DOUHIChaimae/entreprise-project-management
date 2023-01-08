@@ -1,10 +1,15 @@
 package ma.enset.projectmanagement.entities;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import ma.enset.projectmanagement.utils.DateUtils;
+import ma.enset.projectmanagement.utils.StringUtils;
+import ma.enset.projectmanagement.utils.files.FileMappable;
 
-public class Projet {
+import java.text.ParseException;
+import java.util.*;
+
+public class Projet implements FileMappable<Projet> {
+    public static final String PROJECT = "PROJECT";
+
     private int id;
     private String titre;
     private String description;
@@ -102,5 +107,33 @@ public class Projet {
 
         return str.toString();
 
+    }
+    @Override
+    public String mapperToLine() {
+        return String.join(StringUtils.SEMI_COLON,
+                Arrays.asList(
+                        PROJECT,
+                        titre,
+                        description,
+                        Objects.isNull(dateDebut) ? StringUtils.UNDERSCORE : dateDebut.toString(),
+                        Objects.isNull(dateFin) ? StringUtils.UNDERSCORE : dateFin.toString()
+                ));
+    }
+
+    public void mapperInfosFromLine(String line) throws ParseException {
+        String[] infos = line.split(StringUtils.SEMI_COLON.toString());
+        this.titre = infos[1];
+        this.description = infos[2];
+        if(!StringUtils.isBlank(infos[3]) && !StringUtils.UNDERSCORE.equals(infos[3]))
+            dateDebut = DateUtils.from(infos[3]);
+        if(!StringUtils.isBlank(infos[4]) && !StringUtils.UNDERSCORE.equals(infos[4]))
+            dateFin= DateUtils.from(infos[4]);
+    }
+    public void addTache(Tache tache) {
+        taches.add(tache);
+    }
+
+    public void addIntervenant(Intervenant intervenant) {
+        this.intervenants.add(intervenant);
     }
 }

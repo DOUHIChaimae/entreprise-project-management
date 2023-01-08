@@ -1,9 +1,15 @@
 package ma.enset.projectmanagement.entities;
 
+import ma.enset.projectmanagement.utils.StringUtils;
+import ma.enset.projectmanagement.utils.files.FileMappable;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class Responsable {
+public class Responsable implements FileMappable<Responsable> {
+    public static final String RESPONSABLE = "RESPONSABLE";
+
     private String matricule;
     private String nom;
     private String prenom;
@@ -106,5 +112,30 @@ public class Responsable {
                 ", email='" + email + '\'' +
                 ", motDePasse='" + motDePasse + '\'' +
                 '}';
+    }
+    @Override
+    public String mapperToLine() {
+        return String.join(
+                StringUtils.SEMI_COLON,
+                Arrays.asList(
+                        RESPONSABLE,
+                        matricule,
+                        nom,
+                        prenom,
+                        numeroTel,
+                        email
+                )
+        );
+    }
+
+    public static Responsable mapperInfosFromLine(String line) {
+        Responsable responsable = new Responsable();
+        String[] infos = line.split(StringUtils.SEMI_COLON.toString());
+        responsable.setMatricule(infos[1]);
+        responsable.setNom(infos[2]);
+        responsable.setPrenom(infos[3]);
+        responsable.setNumeroTel(infos[4]);
+        responsable.setEmail(infos[5]);
+        return responsable;
     }
 }
