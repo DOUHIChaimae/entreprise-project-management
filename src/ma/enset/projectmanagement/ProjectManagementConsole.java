@@ -9,6 +9,6 @@ public class ProjectManagementConsole {
     public static void main(String[] args) throws ParseException {
         CompositeServices compositeServices = new CompositeServicesImpl();
         //compositeServices.exportProject(2);
-        compositeServices.importerProject("2 eme projet");
+        //compositeServices.importerProject("2 eme projet");
     }
 }

@@ -8,8 +8,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class ProjectManagementJavaFxRunner  extends Application {
-    double X=0 ,Y = 0;
+public class ProjectManagementJavaFxRunner extends Application {
+    double X = 0, Y = 0;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -17,13 +17,13 @@ public class ProjectManagementJavaFxRunner  extends Application {
         primaryStage.initStyle(StageStyle.UNDECORATED);
         root.setOnMousePressed(event -> {
             X = event.getSceneX();
-            Y=event.getSceneY();
+            Y = event.getSceneY();
         });
         root.setOnMouseDragged(event -> {
-            primaryStage.setX(event.getSceneX()-X);
-            primaryStage.setY(event.getSceneY()-Y);
+            primaryStage.setX(event.getSceneX() - X);
+            primaryStage.setY(event.getSceneY() - Y);
         });
-        Scene scene = new Scene(root,600,400);
+        Scene scene = new Scene(root, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Project Management");
         primaryStage.getIcons().add(new Image("ma/enset/projectmanagement/presentation/ressources/icon.png"));
