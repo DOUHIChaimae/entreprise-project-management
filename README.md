@@ -5,22 +5,22 @@ manage business projects. This application will allow you to manage project task
 resources, and displays planning in Gantt chart.
 
 ### Login page
-![login](E:\S3-GLSID2\JAVA-GLSID2\entreprise-project-management\images\login.png)
+![login](https://github.com/DOUHIChaimae/entreprise-project-management/blob/master/images/login.png)
 
 ### Project manager
-![project manager](E:\S3-GLSID2\JAVA-GLSID2\entreprise-project-management\images\responsable.png)
+![project manager](https://github.com/DOUHIChaimae/entreprise-project-management/blob/master/images/responsable.png)
 
 ### Contributor
-![Contributor](E:\S3-GLSID2\JAVA-GLSID2\entreprise-project-management\images\int.png)
+![Contributor](https://github.com/DOUHIChaimae/entreprise-project-management/blob/master/images/int.png)
 
 ### Tasks
-![Task](E:\S3-GLSID2\JAVA-GLSID2\entreprise-project-management\images\int.png)
+![Task](https://github.com/DOUHIChaimae/entreprise-project-management/blob/master/images/task.png)
 
 ### Edit account
-![edit](E:\S3-GLSID2\JAVA-GLSID2\entreprise-project-management\images\update.png)
+![edit](https://github.com/DOUHIChaimae/entreprise-project-management/blob/master/images/update.png)
 
 ### Delete project
-![delete](E:\S3-GLSID2\JAVA-GLSID2\entreprise-project-management\images\delete.png)
+![delete](https://github.com/DOUHIChaimae/entreprise-project-management/blob/master/images/delete.png)
 
 
 
